@@ -5,6 +5,7 @@ from pymediainfo import MediaInfo
 from pprint import pprint
 import sys 
 from os import system, name
+from time import monotonic
 
 def clear():
  
@@ -51,6 +52,5 @@ for item in p.rglob("*"):
             d = dpath.new(d, item.as_posix(), reason.strip().strip("|").strip())
         clear()
 
-scan_path = sys.argv[1].replace("/","_").replace("\\", "_")
-with open(f"media_language_scan_{scan_path}.yaml", "w") as f:
+with open(f"media_language_scan_{int(monotonic()*1000)}.yaml", "w") as f:
     yaml.dump(d, f)
