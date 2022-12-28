@@ -50,6 +50,7 @@ for item in p.rglob("*"):
             print("Match!")
             d = dpath.new(d, item.as_posix(), reason.strip().strip("|").strip())
         clear()
-        
-with open("media_language_scan.yaml", "w") as f:
+
+scan_path = sys.argv[1].replace("/","_")
+with open(f"media_language_scan_{scan_path}.yaml", "w") as f:
     yaml.dump(d, f)
