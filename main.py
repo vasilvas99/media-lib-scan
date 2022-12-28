@@ -33,8 +33,13 @@ for item in p.rglob("*"):
         
         if intersection(SEARCH_TAGS, item.name.split(TAG_SEPARATOR)):
          reason += "Name Tag | "
-         
-        info = MediaInfo.parse(item.as_posix())
+        
+        try:
+            info = MediaInfo.parse(item.as_posix())
+        except Exception as ex:
+            print(f"Failed to parse {item}: {ex}")
+            continue
+        
         for track in info.tracks:
             if track.language is None:
                 continue
