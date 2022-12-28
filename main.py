@@ -3,10 +3,11 @@ from pathlib import Path
 import dpath 
 from pymediainfo import MediaInfo
 from pprint import pprint
+import sys 
 
-p = Path("/home/vasko/Downloads")
+p = Path(sys.argv[1])
 SEARCH_LANGS = ["Bulgarian", "bg", "bul"]
-SEARCH_TAGS = ["Bulgarian", "bg", "bul"]
+SEARCH_TAGS = ["bg", "bul", "bulgarian"]
 TAG_SEPARATOR = "."
 
 def intersection(lst1, lst2):
@@ -19,17 +20,17 @@ for item in p.rglob("*"):
         reason = ""
         
         if intersection(SEARCH_TAGS, item.name.split(TAG_SEPARATOR)):
-         reason += "Name Tag "
+         reason += "Name Tag | "
          
         info = MediaInfo.parse(item.as_posix())
         for track in info.tracks:
             if track.language is None:
                 continue
             if intersection(SEARCH_LANGS, track.other_language):
-                reason += f"{track.track_type} {track.track_id} track "
+                reason += f"{track.track_type} {track.track_id} track | "
                 
         if reason:
-            d = dpath.new(d, item.as_posix(), reason.strip())
+            d = dpath.new(d, item.as_posix(), reason.strip().strip("|").strip())
         
 with open("media_language_scan.yaml", "w") as f:
     yaml.dump(d, f)
